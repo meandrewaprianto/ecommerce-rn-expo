@@ -8,12 +8,12 @@ const storage = multer.diskStorage({
 });
 
 //filefilter: jpeg,jpg,png,webp
-const fileFilter = (reg, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|wbep/;
+const fileFilter = (_, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png|webp/;
   const extname = allowedTypes.test(
     path.extname(file.originalname).toLocaleLowerCase()
   );
-  const mimeType = allowedTypes.test(file.mimeType);
+  const mimeType = allowedTypes.test(file.mimetype);
 
   if (extname && mimeType) {
     cb(null, true);
