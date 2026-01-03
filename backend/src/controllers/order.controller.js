@@ -21,28 +21,28 @@ export async function createOrder(req, res) {
       }
       if (product.stock < item.quantity) {
         return res
-          .status(404)
+          .status(400)
           .json({ error: `Insufficient stock for ${product.name}` });
       }
-
-      const order = await Order.create({
-        user: user._id,
-        clerkId: user.clerkId,
-        orderItems,
-        shippingAddress,
-        paymentResult,
-        totalPrice,
-      });
-
-      // update product stock -1
-      for (const item of orderItems) {
-        await Product.findByIdAndUpdate(item.product._id, {
-          $inc: { stock: -item.quantity },
-        });
-      }
-
-      res.status(201).json({ message: "Order created successfully ", order });
     }
+
+    const order = await Order.create({
+      user: user._id,
+      clerkId: user.clerkId,
+      orderItems,
+      shippingAddress,
+      paymentResult,
+      totalPrice,
+    });
+
+    // update product stock
+    for (const item of orderItems) {
+      await Product.findByIdAndUpdate(item.product._id, {
+        $inc: { stock: -item.quantity },
+      });
+    }
+
+    res.status(201).json({ message: "Order created successfully ", order });
   } catch (error) {
     console.error("Error in createOrder controller: ", error);
     res.status(500).json({ error: "Internal Server Error" });
