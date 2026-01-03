@@ -173,7 +173,8 @@ export async function removeFromWishList(req, res) {
 
 export async function getWishList(req, res) {
   try {
-    const user = req.user;
+    // we're using populate, bc wishlist is just an array of product ids
+    const user = await User.findById(req.user._id).populate("wishlist");
     res.status(200).json({ wishlist: user.wishlist });
   } catch (error) {
     console.error("Error in getWishlist controller:", error);
