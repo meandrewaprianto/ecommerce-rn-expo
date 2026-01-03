@@ -138,7 +138,10 @@ export async function addToWishlist(req, res) {
     res
       .status(200)
       .json({ message: "Product added to wishlist", wishlist: user.wishlist });
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error in addToWishList controller:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
 export async function removeFromWishList(req, res) {
@@ -169,7 +172,7 @@ export async function getWishList(req, res) {
     const user = req.user;
     res.status(200).json({ wishlist: user.wishlist });
   } catch (error) {
-    console.error("Error in getWishlsit controller:", error);
+    console.error("Error in getWishlist controller:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 }
