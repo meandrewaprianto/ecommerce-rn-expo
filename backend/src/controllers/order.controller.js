@@ -12,6 +12,7 @@ export async function createOrder(req, res) {
     }
 
     // validate product and stock
+    // todo: check later in the video if this is actually working
     for (const item of orderItems) {
       const product = await Product.findById(item.product._id);
       if (!product) {
@@ -37,6 +38,7 @@ export async function createOrder(req, res) {
 
     // update product stock
     for (const item of orderItems) {
+      // todo: check later in the video if this is actually working
       await Product.findByIdAndUpdate(item.product._id, {
         $inc: { stock: -item.quantity },
       });
@@ -56,12 +58,17 @@ export async function getUserOrders(req, res) {
       .sort({ createdAt: -1 });
 
     // check if each order had been reviewed
+    const orderIds = orders.map((order) => order._id);
+    const reviews = await Review.find({ orderId: { $in: orderIds } });
+    const reviewedOrderIds = new Set(
+      reviews.map((review) => review.orderId.toString())
+    );
+
     const ordersWithReviewStatus = await Promise.all(
       orders.map(async (order) => {
-        const review = await Review.findOne({ orderId: order._id });
         return {
           ...order.toObject(),
-          hasReviewed: !!review,
+          hasReviewed: reviewedOrderIds.has(order._id.toString()),
         };
       })
     );
