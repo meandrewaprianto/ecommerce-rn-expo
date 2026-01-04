@@ -2,7 +2,7 @@ import { Order } from "../models/order.model.js";
 import { Product } from "../models/product.model.js";
 import { Review } from "../models/review.model.js";
 
-export async function createReview() {
+export async function createReview(req, res) {
   try {
     const { productId, orderId, rating } = req.body;
 
@@ -45,7 +45,9 @@ export async function createReview() {
       userId: user._id,
     });
     if (existingReview) {
-      res.status(400).json({ error: "You have already reviewed this product" });
+      return res
+        .status(400)
+        .json({ error: "You have already reviewed this product" });
     }
 
     const review = await Review.create({
@@ -72,9 +74,9 @@ export async function createReview() {
   }
 }
 
-export async function deleteReview() {
+export async function deleteReview(req, res) {
   try {
-    const { reviewId } = req.params();
+    const { reviewId } = req.params;
     const user = req.user;
 
     const review = await Review.findById(reviewId);
@@ -89,7 +91,7 @@ export async function deleteReview() {
     }
 
     const productId = review.productId;
-    await Review.findByIdAndDelete(productId);
+    await Review.findByIdAndDelete(reviewId);
 
     const reviews = await Review.find({ productId });
     const totalRating = reviews.reduce((sum, rev) => sum + rev.rating, 0);
