@@ -41,6 +41,7 @@ export async function addToCart(req, res) {
     let cart = await Cart.findOne({ clerkId: req.user.clerkId });
 
     if (!cart) {
+      const user = req.user;
       cart = await Cart.create({
         user: user._id,
         clerkid: user.clerkId,
@@ -118,7 +119,7 @@ export async function removeFromCart(req, res) {
   try {
     const { productId } = req.params;
 
-    const cart = await Cart.findOne({ clerkid: req.user.clerkId });
+    const cart = await Cart.findOne({ clerkId: req.user.clerkId });
     if (!cart) {
       return res.status(404).json({ error: "Cart not found" });
     }
