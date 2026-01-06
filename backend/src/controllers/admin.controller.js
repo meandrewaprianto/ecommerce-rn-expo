@@ -99,7 +99,7 @@ export async function updateProduct(req, res) {
   }
 }
 
-export async function getAllOrders(req, res) {
+export async function getAllOrders(_, res) {
   try {
     const orders = await Order.find()
       .populate("user", "name email")
