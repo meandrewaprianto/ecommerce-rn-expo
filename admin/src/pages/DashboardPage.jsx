@@ -27,22 +27,22 @@ function DashboardPage() {
       name: "Total Revenue",
       value: statsLoading
         ? "..."
-        : `$${statsData.totalRevenue.toFixed(2) || 0}`,
+        : `$${statsData?.totalRevenue?.toFixed(2) || 0}`,
       icon: <DollarSignIcon className="size-8" />,
     },
     {
       name: "Total Orders",
-      value: statsLoading ? "..." : `${statsData.totalOrders || 0}`,
+      value: statsLoading ? "..." : `${statsData?.totalOrders || 0}`,
       icon: <ShoppingBagIcon className="size-8" />,
     },
     {
       name: "Total Customers",
-      value: statsLoading ? "..." : `${statsData.totalCustomers || 0}`,
+      value: statsLoading ? "..." : `${statsData?.totalCustomers || 0}`,
       icon: <UserIcon className="size-8" />,
     },
     {
       name: "Total Products",
-      value: statsLoading ? "..." : `$${statsData.totalProducts || 0}`,
+      value: statsLoading ? "..." : `$${statsData?.totalProducts || 0}`,
       icon: <PackageIcon className="size-8" />,
     },
   ];
@@ -92,7 +92,7 @@ function DashboardPage() {
                     <tr key={order._id}>
                       <td>
                         <span className="font-medium">
-                          #{order.id.slice(-8).toUpperCase()}
+                          #{order._id.slice(-8).toUpperCase()}
                         </span>
                       </td>
                       <td>
@@ -109,7 +109,7 @@ function DashboardPage() {
                         <div className="text-sm">
                           {order.orderItems[0]?.name}
                           {order.orderItems.length > 1 &&
-                            `${order.orderItems.length - 1} more`}
+                            ` +${order.orderItems.length - 1} more`}
                         </div>
                       </td>
                       <td>
