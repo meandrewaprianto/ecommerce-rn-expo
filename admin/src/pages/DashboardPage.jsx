@@ -42,7 +42,7 @@ function DashboardPage() {
     },
     {
       name: "Total Products",
-      value: statsLoading ? "..." : `$${statsData?.totalProducts || 0}`,
+      value: statsLoading ? "..." : `${statsData?.totalProducts || 0}`,
       icon: <PackageIcon className="size-8" />,
     },
   ];
