@@ -89,6 +89,11 @@ function ProductPage() {
     const files = Array.from(e.target.files);
     if (files.length > 3) return alert("Maximum 3 images allowed");
 
+    //Revoke previous blob URLs to free memory
+    imagePreviews.forEach((url) => {
+      if (url.startsWith("blob:")) URL.revokeObjectURL(url);
+    });
+
     setImages(files);
     setImagePreviews(files.map((file) => URL.createObjectURL(file)));
   };
@@ -195,7 +200,7 @@ function ProductPage() {
                       onClick={() => deleteProductMutation.mutate(product._id)}
                     >
                       {deleteProductMutation.isPending ? (
-                        <span className="loading"></span>
+                        <span className="loading loading-spinner"></span>
                       ) : (
                         <Trash2Icon className="size-5" />
                       )}
@@ -347,7 +352,7 @@ function ProductPage() {
               {imagePreviews.length > 0 && (
                 <div className="flex gap-2 mt-2">
                   {imagePreviews.map((preivew, index) => (
-                    <div className="w-20 rounded-lg">
+                    <div className="w-20 rounded-lg" key={index}>
                       <img src={preivew} alt={`Preview ${index + 1}`} />
                     </div>
                   ))}
